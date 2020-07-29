@@ -1,5 +1,3 @@
-from os import path, mkdir, listdir, remove, walk, rename, rmdir
-from sys import exit
 import re
 import xml.etree.ElementTree as ET
 import zipfile
@@ -7,76 +5,73 @@ import numpy
 import shutil
 from pathlib import Path as plpath
 from math import ceil
+from settings import *
 
 # User settings
-driveLetter = "F"
-romsetFolder = driveLetter+":\\Romsets"
 systemDirs = [d for d in listdir(romsetFolder) if path.isdir(path.join(romsetFolder, d))]
 systemChoice = ""
 systemName = ""
 systemFolder = ""
-xmdbDir = driveLetter+":\\Rom Tools\\No-Intro Database"
 xmdb = ""
-usaOnly = False
 
-mergedParentFolder = driveLetter+":\\Roms\\Merged"
-sortedParentFolder = driveLetter+":\\Roms\\Merged and Sorted"
-onePerGameParentFolder = driveLetter+":\\Roms\\1G1R\\"
+mergedParentFolder = path.join(outputFolder, "Merged")
+sortedParentFolder = path.join(outputFolder, "Merged and Sorted")
+onePerGameParentFolder = path.join(outputFolder, "1G1R")
 
 biasPriority = ["World","USA","En","Europe","Australia","Canada","Japan","Ja","France","Fr","Germany","De","Spain","Es","Italy","It","Norway","Brazil","Sweden","China","Zh","Korea","Ko","Asia","Netherlands","Russia","Ru","Denmark","Nl","Pt","Sv","No","Da","Fi","Pl","Unknown"]
 zoneBiasValues = {
 	"World" : 0,
-    "U" : 0,
-    "USA" : 0,
-    "En" : 1,
-    "E" : 2,
-    "Europe" : 2,
-    "A" : 3,
-    "Australia" : 3,
-    "Ca" : 4,
-    "Canada" : 4,
-    "J" : 5,
-    "Japan" : 5,
-    "Ja" : 5,
-    "F" : 6,
-    "France" : 6,
-    "Fr" : 6,
-    "G" : 7,
+	"U" : 0,
+	"USA" : 0,
+	"En" : 1,
+	"E" : 2,
+	"Europe" : 2,
+	"A" : 3,
+	"Australia" : 3,
+	"Ca" : 4,
+	"Canada" : 4,
+	"J" : 5,
+	"Japan" : 5,
+	"Ja" : 5,
+	"F" : 6,
+	"France" : 6,
+	"Fr" : 6,
+	"G" : 7,
 	"Germany" : 7,
 	"De" : 7,
-    "S" : 8,
-    "Spain" : 8,
-    "Es" : 8,
-    "I" : 9,
-    "Italy" : 9,
-    "It" : 9,
-    "No" : 10,
-    "Norway" : 10,
-    "Br" : 11,
-    "Brazil" : 11,
-    "Sw" : 12,
-    "Sweden" : 12,
-    "Cn" : 13,
-    "China" : 13,
-    "Zh" : 13,
-    "K" : 14,
-    "Korea" : 14,
-    "Ko" : 14,
-    "As" : 15,
-    "Asia" : 15,
-    "Ne" : 16,
-    "Netherlands" : 16,
-    "Ru" : 17,
-    "Russia" : 17,
-    "Da" : 18,
-    "Denmark" : 18,
-    "Nl" : 19,
-    "Pt" : 20,
-    "Sv" : 21,
-    "No" : 22,
-    "Da" : 23,
-    "Fi" : 24,
-    "Pl" : 25
+	"S" : 8,
+	"Spain" : 8,
+	"Es" : 8,
+	"I" : 9,
+	"Italy" : 9,
+	"It" : 9,
+	"No" : 10,
+	"Norway" : 10,
+	"Br" : 11,
+	"Brazil" : 11,
+	"Sw" : 12,
+	"Sweden" : 12,
+	"Cn" : 13,
+	"China" : 13,
+	"Zh" : 13,
+	"K" : 14,
+	"Korea" : 14,
+	"Ko" : 14,
+	"As" : 15,
+	"Asia" : 15,
+	"Ne" : 16,
+	"Netherlands" : 16,
+	"Ru" : 17,
+	"Russia" : 17,
+	"Da" : 18,
+	"Denmark" : 18,
+	"Nl" : 19,
+	"Pt" : 20,
+	"Sv" : 21,
+	"No" : 22,
+	"Da" : 23,
+	"Fi" : 24,
+	"Pl" : 25
 }
 
 compilationArray = ["2 Games in 1 -", "2 Games in 1! -", "2 Disney Games -", "2 Great Games! -", "2 in 1 -", "2 in 1 Game Pack -", "2-in-1 Fun Pack -", "3 Games in 1 -", "4 Games on One Game Pak", "Double Game!", "Double Pack", "2 Jeux en 1", "Crash Superpack", "Spyro Superpack", "Crash & Spyro Superpack"]
@@ -96,6 +91,9 @@ def main():
 	global onePerGameFolder
 
 	systemChoices = makeChoice("Choose romset(s):", systemDirs, True)
+	if systemChoices is None:
+		print("\nNo romsets found. Quitting.")
+		sys.exit()
 	choice = makeChoice("\nWhat do you want to do?", [
 		"Merge matching ROMs into archives",
 		"Sort merged archives (must merge first)",
@@ -110,7 +108,7 @@ def main():
 	for sc in systemChoices:
 		systemChoice = systemDirs[sc-1]
 		systemName = systemChoice.split("(")[0].strip()
-		systemFolder = driveLetter+":\\Romsets\\"+systemChoice
+		systemFolder = path.join(romsetFolder, systemChoice)
 		for f in listdir(xmdbDir):
 			if f.split("(")[0].strip() == systemName:
 				xmdb = path.join(xmdbDir, f)
