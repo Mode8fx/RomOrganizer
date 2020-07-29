@@ -10,9 +10,10 @@ D:/Romsets/Sega - Sega Genesis/My Game 1 (Japan).zip
 D:/Romsets/Sega - Sega Genesis/My Game 2 (Europe).zip
 D:/Romsets/Sega - Sega Genesis/My Game 2 (Japan).zip
 ```
-... provided you have a dataset file...
-`D:/Rom Tools/No-Intro Database/Sega - Sega Genesis.xmdb`
-
+... provided you have a dataset file:
+```
+D:/Rom Tools/No-Intro Database/Sega - Sega Genesis.xmdb
+```
 ... will be copied and sorted as:
 ```
 D:/Roms/Merged and Sorted/Sega - Sega Genesis/USA/My Game 1/My Game 1 (USA).zip
