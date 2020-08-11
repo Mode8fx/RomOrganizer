@@ -1,6 +1,6 @@
 # Rom Organizer
 
-**OUTDATED** - Use Rom Organizer Deluxe instead (coming within the next few days)
+**OUTDATED** - Use [Rom Organizer Deluxe](https://github.com/GateGuy/RomOrganizerDeluxe) instead.
 
 This is a program that uses No Intro database files to create an organized copy of a local romset.
 
